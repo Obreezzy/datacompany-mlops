@@ -1,0 +1,56 @@
+name: DataCompany ML Pipeline
+
+# Trigger: runs every time code is pushed to main
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  train-test-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1 — Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2 — Set up Python
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      # Step 3 — Cache pip packages (speeds up future runs)
+      - name: Cache pip packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+
+      # Step 4 — Install dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+
+      # Step 5 — Train the model (includes quality gate)
+      # If accuracy is below threshold, train.py calls exit(1)
+      # which fails the pipeline here — nothing else runs
+      - name: Train model and run quality gate
+        run: python train.py
+
+      # Step 6 — Run all API tests
+      - name: Run API tests
+        run: pytest test_api.py -v
+
+      # Step 7 — Report what was built
+      - name: Show model metadata
+        run: cat model/metadata.json
+
+      # Step 8 — Build Docker image
+      # This proves the container still builds after code changes
+      - name: Build Docker image
+        run: docker build -t datacompany-risk-model:latest .
+
+      - name: Confirm Docker image built
+        run: docker images datacompany-risk-model
