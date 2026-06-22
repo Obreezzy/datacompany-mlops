@@ -54,3 +54,6 @@ jobs:
 
       - name: Confirm Docker image built
         run: docker images datacompany-risk-model
+
+      - name: Run model monitoring
+        run: python monitor.py
