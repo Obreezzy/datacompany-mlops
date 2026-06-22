@@ -102,7 +102,7 @@ print(classification_report(y_test, y_pred, target_names=le.classes_))
 
 print("\nStep 4: Quality gate check...")
 
-ACCURACY_THRESHOLD = 0.75
+ACCURACY_THRESHOLD = 0.99
 F1_THRESHOLD       = 0.70
 
 if accuracy < ACCURACY_THRESHOLD:
