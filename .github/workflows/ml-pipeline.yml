@@ -43,14 +43,12 @@ jobs:
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/datacompany-risk-model:latest .
       
-      - name: Log in to Docker Hub and push
+      - name: Log in to GitHub Container Registry and push
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          DOCKER_TOKEN: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
         run: |
-          docker login registry-1.docker.io -u "$DOCKER_USER" -p "$DOCKER_TOKEN"
-          docker push "$DOCKER_USER/datacompany-risk-model:latest"
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker tag ${{ secrets.DOCKER_USERNAME }}/datacompany-risk-model:latest ghcr.io/${{ github.actor }}/datacompany-risk-model:latest
+          docker push ghcr.io/${{ github.actor }}/datacompany-risk-model:latest
           echo "================================================"
-          echo "Deployment complete"
+          echo "Deployed to: ghcr.io/${{ github.actor }}/datacompany-risk-model:latest"
           echo "================================================"
