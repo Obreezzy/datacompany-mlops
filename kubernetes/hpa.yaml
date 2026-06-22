@@ -1,0 +1,21 @@
+# kubernetes/hpa.yaml
+# Automatically scales pods based on CPU usage
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: risk-model-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: datacompany-risk-model
+  minReplicas: 3                     # Never go below 3 pods
+  maxReplicas: 10                    # Never exceed 10 pods
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70       # Scale up when CPU hits 70%

@@ -1,0 +1,43 @@
+# kubernetes/deployment.yaml
+# This tells Kubernetes how to run the DataCompany risk model
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datacompany-risk-model
+  labels:
+    app: risk-model
+spec:
+  replicas: 3                        # Run 3 copies for high availability
+  selector:
+    matchLabels:
+      app: risk-model
+  template:
+    metadata:
+      labels:
+        app: risk-model
+    spec:
+      containers:
+      - name: risk-model
+        image: datacompany/risk-model:latest
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            memory: "256Mi"          # Minimum memory guaranteed
+            cpu: "250m"              # 0.25 CPU cores guaranteed
+          limits:
+            memory: "512Mi"          # Maximum memory allowed
+            cpu: "500m"              # Maximum 0.5 CPU cores
+        livenessProbe:               # Kubernetes checks this to know if pod is alive
+          httpGet:
+            path: /health
+            port: 5001
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:              # Kubernetes checks this before sending traffic
+          httpGet:
+            path: /health
+            port: 5001
+          initialDelaySeconds: 5
+          periodSeconds: 10

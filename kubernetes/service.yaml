@@ -1,0 +1,15 @@
+# kubernetes/service.yaml
+# This exposes the deployment to the outside world
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: risk-model-service
+spec:
+  selector:
+    app: risk-model                  # Routes traffic to pods with this label
+  ports:
+  - protocol: TCP
+    port: 80                         # External port
+    targetPort: 5001                 # Internal container port
+  type: LoadBalancer                 # Creates a public IP on cloud providers
