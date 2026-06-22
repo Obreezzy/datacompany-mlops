@@ -1,0 +1,19 @@
+{
+  "models": [
+    {
+      "version": "v20260622_134249",
+      "accuracy": 0.885,
+      "f1_score": 0.8837,
+      "trained_at": "2026-06-22T13:42:50.033268",
+      "status": "production"
+    },
+    {
+      "version": "v20260622_134722",
+      "accuracy": 0.885,
+      "f1_score": 0.8837,
+      "trained_at": "2026-06-22T13:47:23.018507",
+      "status": "candidate"
+    }
+  ],
+  "production": "v20260622_134249"
+}
