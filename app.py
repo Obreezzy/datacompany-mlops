@@ -26,6 +26,7 @@ def health():
     return jsonify({
         "status":  "healthy",
         "version": metadata["version"],
+        "service": "DataCompany Risk API",
         "model":   metadata["model_type"]
     })
 
