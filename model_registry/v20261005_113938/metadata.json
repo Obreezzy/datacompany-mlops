@@ -1,0 +1,23 @@
+{
+  "version": "v20261005_113938",
+  "accuracy": 0.885,
+  "f1_score": 0.8837,
+  "training_samples": 800,
+  "features": [
+    "missed_payments",
+    "inspection_score",
+    "complaints_received",
+    "tenancy_months",
+    "maintenance_calls",
+    "property_size"
+  ],
+  "model_type": "RandomForestClassifier",
+  "n_estimators": 100,
+  "trained_at": "2026-10-05T11:39:38.653099",
+  "classes": [
+    "HIGH",
+    "LOW",
+    "MEDIUM"
+  ],
+  "status": "candidate"
+}
