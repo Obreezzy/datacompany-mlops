@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy requirements first — Docker caches this layer
 # so it only reinstalls packages when requirements change
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip pip install --default-timeout=300 --retries 10 -r requirements.txt
 
 # Copy application code
 COPY app.py .
